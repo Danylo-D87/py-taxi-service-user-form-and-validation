@@ -120,20 +120,23 @@ class AssignDriverToCarView(LoginRequiredMixin, View):
     def post(self, request, pk):
         car = get_object_or_404(Car, pk=pk)
         user = request.user
-        # Перевірка, чи user — драйвер. Припустимо, у тебе модель Driver або User розширена Driver
-        if hasattr(user, 'driver') or isinstance(user, Driver):
+        if hasattr(user, "driver") or isinstance(user, Driver):
             car.drivers.add(user)
             return redirect("taxi:car-detail", pk=pk)
         else:
-            return HttpResponseForbidden("Only drivers can be assigned to cars.")
+            return HttpResponseForbidden(
+                "Only drivers can be assigned to cars."
+            )
 
 
 class RemoveDriverFromCarView(LoginRequiredMixin, View):
     def post(self, request, pk):
         car = get_object_or_404(Car, pk=pk)
         user = request.user
-        if hasattr(user, 'driver') or isinstance(user, Driver):
+        if hasattr(user, "driver") or isinstance(user, Driver):
             car.drivers.remove(user)
             return redirect("taxi:car-detail", pk=pk)
         else:
-            return HttpResponseForbidden("Only drivers can be removed from cars.")
+            return HttpResponseForbidden(
+                "Only drivers can be removed from cars."
+            )
